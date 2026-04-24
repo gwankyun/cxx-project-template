@@ -1,0 +1,95 @@
+﻿{
+    "version": 10,
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "msvc",
+            "inherits": "base",
+            "description": "Visual Studio 18 2026",
+            "generator": "Visual Studio 18 2026",
+            "architecture": "x64"
+        },
+        {
+            "name": "clang",
+            "inherits": "base",
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "VCPKG_TARGET_TRIPLET": "x64-mingw-clang-static",
+                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
+            },
+            "environment": {
+                "PATH": "$penv{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+            }
+        },
+        {
+            "name": "gcc",
+            "inherits": "base",
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+                "CMAKE_C_COMPILER": "$env{MINGW_ROOT}/bin/gcc.exe",
+                "CMAKE_CXX_COMPILER": "$env{MINGW_ROOT}/bin/g++.exe"
+            },
+            "environment": {
+                "PATH": "$penv{MINGW_ROOT}/bin;$penv{PATH}"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc",
+            "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-release",
+            "configurePreset": "msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "clang",
+            "configurePreset": "clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang-release",
+            "configurePreset": "clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "gcc",
+            "configurePreset": "gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-release",
+            "configurePreset": "gcc",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "msvc",
+            "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang",
+            "configurePreset": "clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc",
+            "configurePreset": "gcc",
+            "configuration": "Debug"
+        }
+    ]
+}

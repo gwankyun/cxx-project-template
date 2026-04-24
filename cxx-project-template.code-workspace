@@ -1,0 +1,30 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cmake.configureOnOpen": false,
+        "cmake.autoSelectActiveFolder": false,
+        "C_Cpp.intelliSenseEngine": "default",
+        "C_Cpp.autocomplete": "default",
+        "C_Cpp.errorSquiggles": "enabled"
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Debug (MSVC)",
+                "type": "cppvsdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/build/msvc/Debug/main.exe",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": false
+            }
+        ]
+    }
+}
