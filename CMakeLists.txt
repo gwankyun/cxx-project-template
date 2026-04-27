@@ -21,6 +21,7 @@ cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
 
 find_package(spdlog CONFIG REQUIRED)
 find_package(doctest CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 # 添加庫
 add_subdirectory(compiler)
@@ -56,28 +57,32 @@ target_compile_features(tests PRIVATE cxx_std_23)
 
 include(cmake/clang.cmake) # clang_copy_dll
 
-# 使用 clang 編譯器
+# 使用 clang 編譯器()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  set(bin_path "$ENV{LLVM_MINGW_ROOT}")
-  cmake_path(APPEND bin_path "bin")
+  cmake_path(SET clang_bin NORMALIZE "$ENV{LLVM_MINGW_ROOT}/bin")
 
-  clang_copy_dll(
-    PATH "${bin_path}"
+  set(dll_files "${clang_bin}/libc++.dll" "${clang_bin}/libunwind.dll")
+
+  target_copy_files(
     TARGET main
-    FILES "libc++.dll" "libunwind.dll"
+    FILES "${dll_files}"
   )
 endif()
 
 # 使用 gcc 編譯器
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  set(bin_path "$ENV{MINGW_ROOT}")
-  cmake_path(APPEND bin_path "bin")
+  cmake_path(SET gcc_bin NORMALIZE "$ENV{MINGW64_ROOT}/bin")
 
-  # 複製 libc++.dll 和 libunwind.dll 到構建目錄
-  clang_copy_dll(
-    PATH "${llvm_bin}"
+  set(
+    dll_files
+    "${gcc_bin}/libgcc_s_seh-1.dll"
+    "${gcc_bin}/libstdc++-6.dll"
+    "${gcc_bin}/libwinpthread-1.dll"
+  )
+
+  target_copy_files(
     TARGET main
-    FILES "libgcc_s_seh-1.dll" "libstdc++-6.dll" "libwinpthread-1.dll"
+    FILES "${dll_files}"
   )
 endif()
 

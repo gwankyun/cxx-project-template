@@ -1,0 +1,9 @@
+{
+  "name": "cxx-project-template",
+  "version": "1.0.0",
+  "dependencies": [
+    "doctest",
+    "spdlog",
+    "nlohmann-json"
+  ]
+}

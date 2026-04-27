@@ -12,13 +12,24 @@
             "inherits": "base",
             "description": "Visual Studio 18 2026",
             "generator": "Visual Studio 18 2026",
-            "architecture": "x64"
+            "architecture": "x64",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF"
+            }
+        },
+        {
+            "name": "msvc-manifest",
+            "inherits": "msvc",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "ON"
+            }
         },
         {
             "name": "clang",
             "inherits": "base",
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "VCPKG_TARGET_TRIPLET": "x64-mingw-clang-static",
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
@@ -33,13 +44,14 @@
             "inherits": "base",
             "generator": "Ninja Multi-Config",
             "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
                 "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
-                "CMAKE_C_COMPILER": "$env{MINGW_ROOT}/bin/gcc.exe",
-                "CMAKE_CXX_COMPILER": "$env{MINGW_ROOT}/bin/g++.exe"
+                "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
+                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe"
             },
             "environment": {
-                "PATH": "$penv{MINGW_ROOT}/bin;$penv{PATH}"
+                "PATH": "$penv{MINGW64_ROOT}/bin;$penv{PATH}"
             }
         }
     ],
@@ -47,6 +59,11 @@
         {
             "name": "msvc",
             "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-manifest",
+            "configurePreset": "msvc-manifest",
             "configuration": "Debug"
         },
         {
