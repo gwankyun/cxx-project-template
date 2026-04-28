@@ -1,5 +1,5 @@
 ﻿# cmake版本
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 4.2)
 
 include(CMakePrintHelpers)
 
@@ -55,7 +55,7 @@ target_link_libraries(
 )
 target_compile_features(tests PRIVATE cxx_std_23)
 
-include(cmake/clang.cmake) # clang_copy_dll
+include(cmake/target_copy_files.cmake) # target_copy_files
 
 # 使用 clang 編譯器()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
