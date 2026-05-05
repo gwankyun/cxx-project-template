@@ -5,7 +5,19 @@
             "name": "base",
             "hidden": true,
             "binaryDir": "${sourceDir}/build/${presetName}",
-            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF"
+            }
+        },
+        {
+            "name": "ninja",
+            "hidden": true,
+            "inherits": "base",
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
         },
         {
             "name": "msvc",
@@ -14,24 +26,27 @@
             "generator": "Visual Studio 18 2026",
             "architecture": "x64",
             "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "OFF"
+                "VCPKG_TARGET_TRIPLET": "x64-windows"
             }
         },
         {
             "name": "msvc-manifest",
             "inherits": "msvc",
             "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "ON"
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_msvc"
             }
         },
         {
+            "name": "msvc-export",
+            "inherits": "msvc",
+            "toolchainFile": "${sourceDir}/vcpkg_exported/msvc/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
             "name": "clang",
-            "inherits": "base",
-            "generator": "Ninja Multi-Config",
+            "inherits": "ninja",
             "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "OFF",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "VCPKG_TARGET_TRIPLET": "x64-mingw-clang-static",
+                "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
             },
@@ -40,19 +55,45 @@
             }
         },
         {
-            "name": "gcc",
-            "inherits": "base",
-            "generator": "Ninja Multi-Config",
+            "name": "clang-manifest",
+            "inherits": "clang",
             "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "OFF",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_clang"
+            }
+        },
+        {
+            "name": "clang-export",
+            "inherits": "clang",
+            "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg_toolchainFile"
+            }
+        },
+        {
+            "name": "gcc",
+            "inherits": "ninja",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
                 "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
                 "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe"
             },
             "environment": {
                 "PATH": "$penv{MINGW64_ROOT}/bin;$penv{PATH}"
             }
+        },
+        {
+            "name": "gcc-manifest",
+            "inherits": "gcc",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_gcc"
+            }
+        },
+        {
+            "name": "gcc-export",
+            "inherits": "gcc",
+            "toolchainFile": "${sourceDir}/vcpkg_exported/gcc/scripts/buildsystems/vcpkg.cmake"
         }
     ],
     "buildPresets": [
@@ -67,6 +108,11 @@
             "configuration": "Debug"
         },
         {
+            "name": "msvc-export",
+            "configurePreset": "msvc-export",
+            "configuration": "Debug"
+        },
+        {
             "name": "msvc-release",
             "configurePreset": "msvc",
             "configuration": "Release"
@@ -77,6 +123,16 @@
             "configuration": "Debug"
         },
         {
+            "name": "clang-manifest",
+            "configurePreset": "clang-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang-export",
+            "configurePreset": "clang-export",
+            "configuration": "Debug"
+        },
+        {
             "name": "clang-release",
             "configurePreset": "clang",
             "configuration": "Release"
@@ -84,6 +140,16 @@
         {
             "name": "gcc",
             "configurePreset": "gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-manifest",
+            "configurePreset": "gcc-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-export",
+            "configurePreset": "gcc-export",
             "configuration": "Debug"
         },
         {
@@ -99,13 +165,43 @@
             "configuration": "Debug"
         },
         {
+            "name": "msvc-manifest",
+            "configurePreset": "msvc-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-export",
+            "configurePreset": "msvc-export",
+            "configuration": "Debug"
+        },
+        {
             "name": "clang",
             "configurePreset": "clang",
             "configuration": "Debug"
         },
         {
+            "name": "clang-manifest",
+            "configurePreset": "clang-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang-export",
+            "configurePreset": "clang-export",
+            "configuration": "Debug"
+        },
+        {
             "name": "gcc",
             "configurePreset": "gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-manifest",
+            "configurePreset": "gcc-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-export",
+            "configurePreset": "gcc-export",
             "configuration": "Debug"
         }
     ]

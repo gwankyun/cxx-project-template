@@ -20,4 +20,5 @@ CMakeUserPresets.json
 
 build/
 .vs/
-vcpkg_installed/
+vcpkg_installed_*
+vcpkg_exported/

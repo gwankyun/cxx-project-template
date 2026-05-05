@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "dependencies": [
     "doctest",
+    "nlohmann-json",
     "spdlog",
-    "nlohmann-json"
+    "whereami",
+    "boost-scope"
   ]
 }
