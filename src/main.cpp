@@ -26,6 +26,10 @@ int main(int _argc, char* _argv[])
     json data = json::parse(f);
 
     bool happy = data["happy"];
+    if (!(data.contains("list") && data["list"].is_array()))
+    {
+        return 1;
+    }
     std::vector<int> lst = data["list"];
     SPDLOG_INFO("happy: {}", happy);
     for (auto& i : lst)

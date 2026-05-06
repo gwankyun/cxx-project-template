@@ -109,6 +109,9 @@ endif()
 # 啟用測試
 enable_testing()
 include(doctest)
+
+add_test(NAME main_tests COMMAND main)
+
 doctest_discover_tests(tests)
 
 set(exe_list main tests)

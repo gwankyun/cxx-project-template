@@ -15,15 +15,37 @@
         "version": "0.2.0",
         "configurations": [
             {
-                "name": "Debug (MSVC)",
+                "name": "Debug (msvgc)",
                 "type": "cppvsdbg",
                 "request": "launch",
                 "program": "${workspaceFolder}/build/msvc/Debug/main.exe",
                 "args": [],
                 "stopAtEntry": false,
                 "cwd": "${workspaceFolder}",
-                "environment": [],
-                "externalConsole": false
+                "environment": []
+            },
+            {
+                "name": "Debug (clang)",
+                "type": "lldb",
+                "request": "launch",
+                "program": "${workspaceFolder}/build/clang/Debug/main.exe",
+                "args": [],
+                "stopOnEntry": false,
+                "cwd": "${workspaceFolder}",
+                "console": "integratedTerminal",
+                "env": {
+                    "PATH": "${env:LLVM_MINGW_ROOT}/bin;${env:PATH}"
+                }
+            },
+            {
+                "name": "Debug (gcc)",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/build/gcc/Debug/main.exe",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": []
             }
         ]
     }
