@@ -1,0 +1,9 @@
+include("${CMAKE_CURRENT_LIST_DIR}/mingw.cmake")
+
+set(VCPKG_C_COMPILER    "$ENV{LLVM_MINGW_ROOT}/bin/clang.exe")
+set(VCPKG_CXX_COMPILER  "$ENV{LLVM_MINGW_ROOT}/bin/clang++.exe")
+
+set(CMAKE_C_COMPILER   "${VCPKG_C_COMPILER}")
+set(CMAKE_CXX_COMPILER "${VCPKG_CXX_COMPILER}")
+
+set(VCPKG_LINKER_FLAGS "-fuse-ld=lld")

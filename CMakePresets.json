@@ -51,7 +51,7 @@
                 "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
             },
             "environment": {
-                "PATH": "$penv{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+                "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
             }
         },
         {
@@ -67,7 +67,32 @@
             "inherits": "clang",
             "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg_toolchainFile"
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
+            }
+        },
+        {
+            "name": "clangcl",
+            "inherits": "msvc",
+            "description": "Clang CL (Visual Studio)",
+            "toolset": "ClangCL",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-clangcl-dynamic"
+            }
+        },
+        {
+            "name": "clangcl-manifest",
+            "inherits": "clangcl",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_clangcl"
+            }
+        },
+        {
+            "name": "clangcl-export",
+            "inherits": "clangcl",
+            "toolchainFile": "${sourceDir}/vcpkg_exported/clangcl/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
             }
         },
         {
@@ -79,7 +104,7 @@
                 "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe"
             },
             "environment": {
-                "PATH": "$penv{MINGW64_ROOT}/bin;$penv{PATH}"
+                "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
             }
         },
         {
@@ -138,6 +163,21 @@
             "configuration": "Release"
         },
         {
+            "name": "clangcl",
+            "configurePreset": "clangcl",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-manifest",
+            "configurePreset": "clangcl-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-export",
+            "configurePreset": "clangcl-export",
+            "configuration": "Debug"
+        },
+        {
             "name": "gcc",
             "configurePreset": "gcc",
             "configuration": "Debug"
@@ -187,6 +227,21 @@
         {
             "name": "clang-export",
             "configurePreset": "clang-export",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl",
+            "configurePreset": "clangcl",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-manifest",
+            "configurePreset": "clangcl-manifest",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-export",
+            "configurePreset": "clangcl-export",
             "configuration": "Debug"
         },
         {

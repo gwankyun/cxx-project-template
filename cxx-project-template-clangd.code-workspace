@@ -18,7 +18,10 @@
             "--pretty",
             "--log=verbose"
         ],
-        "editor.defaultFormatter": "josetr.cmake-language-support-vscode"
+        "editor.defaultFormatter": "josetr.cmake-language-support-vscode",
+        "[cpp]": {
+            "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+        }
     },
     "launch": {
         "version": "0.2.0",

@@ -9,7 +9,8 @@
         "cmake.autoSelectActiveFolder": false,
         "C_Cpp.intelliSenseEngine": "default",
         "C_Cpp.autocomplete": "default",
-        "C_Cpp.errorSquiggles": "enabled"
+        "C_Cpp.errorSquiggles": "enabled",
+        "C_Cpp.default.cppStandard": "c++23"
     },
     "launch": {
         "version": "0.2.0",

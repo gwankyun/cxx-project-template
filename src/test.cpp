@@ -1,21 +1,26 @@
 ﻿#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <fstream>
 
-#include "compiler.h"
 #include <boost/scope/defer.hpp>
-#include <common.hpp>
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
+
+#include "common.hpp"
+#include "compiler.h"
+
 
 using json = nlohmann::json;
 
 TEST_CASE("testing compiler")
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(__clang__)
+    CHECK(compiler::id() == "Clang");
+#elif defined(_MSC_VER)
     CHECK(compiler::id() == "MSVC");
 #elif defined(__clang__)
     CHECK(compiler::id() == "Clang");
 #elif defined(__GNUC__)
+    CHECK(compiler::id() == "GCC");
 #else
 #endif
 }

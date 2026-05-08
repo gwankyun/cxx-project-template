@@ -1,6 +1,6 @@
 ﻿# export.ps1 - 统一的 vcpkg 导出脚本（简化版）
 param(
-    [Parameter(Mandatory=$true)][ValidateSet('msvc','gcc','clang')][string]$compiler,
+    [Parameter(Mandatory=$true)][ValidateSet('msvc','gcc','clang','clangcl')][string]$compiler,
     [switch]$DebugMode
 )
 

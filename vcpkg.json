@@ -2,10 +2,10 @@
   "name": "cxx-project-template",
   "version": "1.0.0",
   "dependencies": [
+    "boost-scope",
     "doctest",
     "nlohmann-json",
-    "spdlog",
     "whereami",
-    "boost-scope"
+    "quill"
   ]
 }

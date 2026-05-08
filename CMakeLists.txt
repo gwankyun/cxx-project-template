@@ -9,20 +9,24 @@ cmake_print_variables(CMAKE_VERSION)
 project(
   cxx_project_template
   # 以下屬性皆可選
-  LANGUAGES
-    CXX # 指定C++可以跳過C編譯器檢測
-  VERSION
-    0.1.0 # 版本
+  LANGUAGES CXX
+  VERSION 0.1.0
   DESCRIPTION "vcpkg使用三編譯器"
 )
 
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
 
-find_package(spdlog CONFIG REQUIRED)
+find_package(spdlog CONFIG)
 find_package(doctest CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(unofficial-whereami CONFIG REQUIRED)
+find_package(boost_scope REQUIRED CONFIG)
+# find_package(g3log CONFIG REQUIRED)
+
+# target_link_libraries(main PRIVATE g3log)
+# find_package(lwlog_lib CONFIG REQUIRED)
+find_package(quill CONFIG REQUIRED)
 
 # 添加庫
 add_subdirectory(compiler)
@@ -37,40 +41,36 @@ target_sources(
       FILES #
         src/common.hpp
 )
-target_link_libraries(
-  common
-  INTERFACE #
-    unofficial::whereami::whereami
-)
+target_link_libraries(common INTERFACE unofficial::whereami::whereami)
 
 # 添加可執行文件
 add_executable(main)
-target_sources(
-  main
-  PRIVATE #
-    src/main.cpp
-)
+target_sources(main PRIVATE src/main.cpp)
 target_link_libraries(
   main
-  PRIVATE #
+  PRIVATE
+    #
     compiler
-    spdlog::spdlog
+    # spdlog::spdlog
+    g3log
+    # lwlog::lwlog_lib
+    quill::quill
+    "$<TARGET_NAME_IF_EXISTS:spdlog::spdlog>"
     nlohmann_json::nlohmann_json
     common
 )
 target_compile_features(main PRIVATE cxx_std_23)
-
-find_package(boost_scope REQUIRED CONFIG)
+target_compile_definitions(
+  main
+  PRIVATE "$<$<TARGET_EXISTS:spdlog::spdlog>:HAVE_SPDLOG=1>"
+)
 
 add_executable(tests)
-target_sources(
-  tests
-  PRIVATE #
-    src/test.cpp
-)
+target_sources(tests PRIVATE src/test.cpp)
 target_link_libraries(
   tests
-  PRIVATE #
+  PRIVATE
+    #
     compiler
     doctest::doctest
     nlohmann_json::nlohmann_json
@@ -115,9 +115,12 @@ add_test(NAME main_tests COMMAND main)
 doctest_discover_tests(tests)
 
 set(exe_list main tests)
+
 foreach(exe IN LISTS exe_list)
   target_copy_files(
-    TARGET ${exe}
-    FILES "${files}"
+    TARGET
+    ${exe}
+    FILES
+    "${files}"
   )
 endforeach()
