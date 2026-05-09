@@ -1,5 +1,6 @@
 ﻿#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <fstream>
+#include <vector>
 
 #include <boost/scope/defer.hpp>
 #include <doctest/doctest.h>
@@ -7,7 +8,6 @@
 
 #include "common.hpp"
 #include "compiler.h"
-
 
 using json = nlohmann::json;
 
