@@ -7,7 +7,8 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "OFF"
+                "VCPKG_MANIFEST_MODE": "OFF",
+                "VCPKG_MANIFEST_INSTALL": "OFF"
             }
         },
         {
@@ -48,7 +49,8 @@
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe"
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
+                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin"
             },
             "environment": {
                 "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
@@ -101,7 +103,8 @@
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
                 "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
-                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe"
+                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe",
+                "COMPILER_BIN": "$env{MINGW64_ROOT}/bin"
             },
             "environment": {
                 "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"

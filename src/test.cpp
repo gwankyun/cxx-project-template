@@ -20,7 +20,7 @@ TEST_CASE("testing compiler")
 #elif defined(__clang__)
     CHECK(compiler::id() == "Clang");
 #elif defined(__GNUC__)
-    CHECK(compiler::id() == "GCC");
+    CHECK(compiler::id() == "GNU");
 #else
 #endif
 }

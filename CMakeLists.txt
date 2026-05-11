@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 4.2)
 include(CMakePrintHelpers)
 
 cmake_print_variables(CMAKE_VERSION)
+# cmake_print_variables(MINGW)
+if(MINGW)
+  message(STATUS "MINGW")
+endif()
 
 # 項目名
 project(
@@ -15,6 +19,7 @@ project(
 )
 
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
+cmake_print_variables(CMAKE_CXX_COMPILER_FRONTEND_VARIANT)
 cmake_print_variables(CMAKE_CXX_COMPILER_VERSION)
 
 find_package(doctest CONFIG REQUIRED)
@@ -65,33 +70,6 @@ target_link_libraries(
 )
 target_compile_features(tests PRIVATE cxx_std_23)
 
-set(files "${CMAKE_CURRENT_SOURCE_DIR}/test.json")
-
-include(cmake/target_copy_files.cmake) # target_copy_files
-
-# 使用 clang 編譯器()
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  cmake_path(SET clang_bin NORMALIZE "$ENV{LLVM_MINGW_ROOT}/bin")
-
-  set(dll_files "${clang_bin}/libc++.dll" "${clang_bin}/libunwind.dll")
-
-  list(APPEND files "${dll_files}")
-endif()
-
-# 使用 gcc 編譯器
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  cmake_path(SET gcc_bin NORMALIZE "$ENV{MINGW64_ROOT}/bin")
-
-  set(
-    dll_files
-    "${gcc_bin}/libgcc_s_seh-1.dll"
-    "${gcc_bin}/libstdc++-6.dll"
-    "${gcc_bin}/libwinpthread-1.dll"
-  )
-
-  list(APPEND files "${dll_files}")
-endif()
-
 # 啟用測試
 enable_testing()
 include(doctest)
@@ -103,8 +81,36 @@ doctest_discover_tests(tests)
 set(exe_list main tests)
 
 foreach(exe IN LISTS exe_list)
-  target_copy_files(
+  add_custom_command(
     TARGET ${exe}
-    FILES "${files}"
+    POST_BUILD
+    COMMAND
+      ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/test.json"
+      "$<TARGET_FILE_DIR:${exe}>"
+    COMMENT "Copy test.json"
   )
+
+  # 複製運行時文件
+  if(
+    (
+      (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      AND (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+    )
+    OR ((CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
+  )
+    set(dirs "${COMPILER_BIN}")
+    cmake_path(NORMAL_PATH dirs)
+    add_custom_command(
+      TARGET ${exe}
+      POST_BUILD
+      COMMAND
+        ${CMAKE_COMMAND}
+        # gersemi: off
+        -D apps="$<TARGET_FILE:${exe}>"
+        -D dirs="${dirs}"
+        # gersemi: on
+        -P "${CMAKE_SOURCE_DIR}/cmake/bundle.cmake"
+      COMMENT ""
+    )
+  endif()
 endforeach()
