@@ -21,7 +21,7 @@
             }
         },
         {
-            "name": "msvc",
+            "name": "msvc-classic",
             "inherits": "base",
             "description": "Visual Studio 18 2026",
             "generator": "Visual Studio 18 2026",
@@ -31,8 +31,8 @@
             }
         },
         {
-            "name": "msvc-manifest",
-            "inherits": "msvc",
+            "name": "msvc",
+            "inherits": "msvc-classic",
             "cacheVariables": {
                 "VCPKG_MANIFEST_MODE": "ON",
                 "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_msvc"
@@ -40,11 +40,11 @@
         },
         {
             "name": "msvc-export",
-            "inherits": "msvc",
+            "inherits": "msvc-classic",
             "toolchainFile": "${sourceDir}/vcpkg_exported/msvc/scripts/buildsystems/vcpkg.cmake"
         },
         {
-            "name": "clang",
+            "name": "clang-classic",
             "inherits": "ninja",
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
@@ -57,8 +57,8 @@
             }
         },
         {
-            "name": "clang-manifest",
-            "inherits": "clang",
+            "name": "clang",
+            "inherits": "clang-classic",
             "cacheVariables": {
                 "VCPKG_MANIFEST_MODE": "ON",
                 "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_clang"
@@ -66,14 +66,14 @@
         },
         {
             "name": "clang-export",
-            "inherits": "clang",
+            "inherits": "clang-classic",
             "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
                 "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
             }
         },
         {
-            "name": "clangcl",
+            "name": "clangcl-classic",
             "inherits": "msvc",
             "description": "Clang CL (Visual Studio)",
             "toolset": "ClangCL",
@@ -82,8 +82,8 @@
             }
         },
         {
-            "name": "clangcl-manifest",
-            "inherits": "clangcl",
+            "name": "clangcl",
+            "inherits": "clangcl-classic",
             "cacheVariables": {
                 "VCPKG_MANIFEST_MODE": "ON",
                 "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_clangcl"
@@ -91,14 +91,14 @@
         },
         {
             "name": "clangcl-export",
-            "inherits": "clangcl",
+            "inherits": "clangcl-classic",
             "toolchainFile": "${sourceDir}/vcpkg_exported/clangcl/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
                 "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
             }
         },
         {
-            "name": "gcc",
+            "name": "gcc-classic",
             "inherits": "ninja",
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
@@ -111,8 +111,8 @@
             }
         },
         {
-            "name": "gcc-manifest",
-            "inherits": "gcc",
+            "name": "gcc",
+            "inherits": "gcc-classic",
             "cacheVariables": {
                 "VCPKG_MANIFEST_MODE": "ON",
                 "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_gcc"
@@ -120,19 +120,19 @@
         },
         {
             "name": "gcc-export",
-            "inherits": "gcc",
+            "inherits": "gcc-classic",
             "toolchainFile": "${sourceDir}/vcpkg_exported/gcc/scripts/buildsystems/vcpkg.cmake"
         }
     ],
     "buildPresets": [
         {
-            "name": "msvc",
-            "configurePreset": "msvc",
+            "name": "msvc-classic",
+            "configurePreset": "msvc-classic",
             "configuration": "Debug"
         },
         {
-            "name": "msvc-manifest",
-            "configurePreset": "msvc-manifest",
+            "name": "msvc",
+            "configurePreset": "msvc",
             "configuration": "Debug"
         },
         {
@@ -141,18 +141,13 @@
             "configuration": "Debug"
         },
         {
-            "name": "msvc-release",
-            "configurePreset": "msvc",
-            "configuration": "Release"
+            "name": "clang-classic",
+            "configurePreset": "clang-classic",
+            "configuration": "Debug"
         },
         {
             "name": "clang",
             "configurePreset": "clang",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang-manifest",
-            "configurePreset": "clang-manifest",
             "configuration": "Debug"
         },
         {
@@ -161,18 +156,13 @@
             "configuration": "Debug"
         },
         {
-            "name": "clang-release",
-            "configurePreset": "clang",
-            "configuration": "Release"
+            "name": "clangcl-classic",
+            "configurePreset": "clangcl-classic",
+            "configuration": "Debug"
         },
         {
             "name": "clangcl",
             "configurePreset": "clangcl",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-manifest",
-            "configurePreset": "clangcl-manifest",
             "configuration": "Debug"
         },
         {
@@ -181,35 +171,30 @@
             "configuration": "Debug"
         },
         {
-            "name": "gcc",
-            "configurePreset": "gcc",
+            "name": "gcc-classic",
+            "configurePreset": "gcc-classic",
             "configuration": "Debug"
         },
         {
-            "name": "gcc-manifest",
-            "configurePreset": "gcc-manifest",
+            "name": "gcc",
+            "configurePreset": "gcc",
             "configuration": "Debug"
         },
         {
             "name": "gcc-export",
             "configurePreset": "gcc-export",
             "configuration": "Debug"
-        },
-        {
-            "name": "gcc-release",
-            "configurePreset": "gcc",
-            "configuration": "Release"
         }
     ],
     "testPresets": [
         {
-            "name": "msvc",
-            "configurePreset": "msvc",
+            "name": "msvc-classic",
+            "configurePreset": "msvc-classic",
             "configuration": "Debug"
         },
         {
-            "name": "msvc-manifest",
-            "configurePreset": "msvc-manifest",
+            "name": "msvc",
+            "configurePreset": "msvc",
             "configuration": "Debug"
         },
         {
@@ -218,13 +203,13 @@
             "configuration": "Debug"
         },
         {
-            "name": "clang",
-            "configurePreset": "clang",
+            "name": "clang-classic",
+            "configurePreset": "clang-classic",
             "configuration": "Debug"
         },
         {
-            "name": "clang-manifest",
-            "configurePreset": "clang-manifest",
+            "name": "clang",
+            "configurePreset": "clang",
             "configuration": "Debug"
         },
         {
@@ -233,13 +218,13 @@
             "configuration": "Debug"
         },
         {
-            "name": "clangcl",
-            "configurePreset": "clangcl",
+            "name": "clangcl-classic",
+            "configurePreset": "clangcl-classic",
             "configuration": "Debug"
         },
         {
-            "name": "clangcl-manifest",
-            "configurePreset": "clangcl-manifest",
+            "name": "clangcl",
+            "configurePreset": "clangcl",
             "configuration": "Debug"
         },
         {
@@ -248,13 +233,13 @@
             "configuration": "Debug"
         },
         {
-            "name": "gcc",
-            "configurePreset": "gcc",
+            "name": "gcc-classic",
+            "configurePreset": "gcc-classic",
             "configuration": "Debug"
         },
         {
-            "name": "gcc-manifest",
-            "configurePreset": "gcc-manifest",
+            "name": "gcc",
+            "configurePreset": "gcc",
             "configuration": "Debug"
         },
         {
