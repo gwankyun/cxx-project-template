@@ -50,7 +50,8 @@
                 "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
                 "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
-                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin"
+                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin",
+                "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
             },
             "environment": {
                 "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
