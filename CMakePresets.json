@@ -12,6 +12,25 @@
             }
         },
         {
+            "name": "classic",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF",
+                "VCPKG_MANIFEST_INSTALL": "OFF"
+            }
+        },
+        {
+            "name": "manifest",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_MANIFEST_INSTALL": "OFF",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_${presetName}"
+            }
+        },
+        {
             "name": "ninja",
             "hidden": true,
             "inherits": "base",
@@ -22,7 +41,7 @@
         },
         {
             "name": "msvc-classic",
-            "inherits": "base",
+            "inherits": "classic",
             "description": "Visual Studio 18 2026",
             "generator": "Visual Studio 18 2026",
             "architecture": "x64",
@@ -32,11 +51,7 @@
         },
         {
             "name": "msvc",
-            "inherits": "msvc-classic",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_msvc"
-            }
+            "inherits": ["msvc-classic", "manifest"]
         },
         {
             "name": "msvc-export",
@@ -45,7 +60,7 @@
         },
         {
             "name": "clang-classic",
-            "inherits": "ninja",
+            "inherits": ["ninja", "classic"],
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
                 "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
@@ -59,23 +74,22 @@
         },
         {
             "name": "clang",
-            "inherits": "clang-classic",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_clang"
-            }
+            "inherits": ["clang-classic", "manifest"]
         },
         {
-            "name": "clang-export",
-            "inherits": "clang-classic",
-            "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake",
+            "name": "overlay-triplets",
             "cacheVariables": {
                 "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
             }
         },
         {
+            "name": "clang-export",
+            "inherits": ["clang-classic", "overlay-triplets"],
+            "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
             "name": "clangcl-classic",
-            "inherits": "msvc",
+            "inherits": "msvc-classic",
             "description": "Clang CL (Visual Studio)",
             "toolset": "ClangCL",
             "cacheVariables": {
@@ -84,19 +98,12 @@
         },
         {
             "name": "clangcl",
-            "inherits": "clangcl-classic",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_clangcl"
-            }
+            "inherits": ["clangcl-classic", "manifest"]
         },
         {
             "name": "clangcl-export",
-            "inherits": "clangcl-classic",
-            "toolchainFile": "${sourceDir}/vcpkg_exported/clangcl/scripts/buildsystems/vcpkg.cmake",
-            "cacheVariables": {
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
-            }
+            "inherits": ["clangcl-classic"],
+            "toolchainFile": "${sourceDir}/vcpkg_exported/clangcl/scripts/buildsystems/vcpkg.cmake"
         },
         {
             "name": "gcc-classic",
@@ -113,11 +120,7 @@
         },
         {
             "name": "gcc",
-            "inherits": "gcc-classic",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_gcc"
-            }
+            "inherits": ["gcc-classic", "manifest"]
         },
         {
             "name": "gcc-export",
@@ -267,11 +270,27 @@
             ]
         },
         {
+            "name": "clang-export",
+            "steps": [
+                { "type": "configure", "name": "clang-export" },
+                { "type": "build", "name": "clang-export" },
+                { "type": "test", "name": "clang-export" }
+            ]
+        },
+        {
             "name": "clangcl",
             "steps": [
                 { "type": "configure", "name": "clangcl" },
                 { "type": "build", "name": "clangcl" },
                 { "type": "test", "name": "clangcl" }
+            ]
+        },
+        {
+            "name": "clangcl-export",
+            "steps": [
+                { "type": "configure", "name": "clangcl-export" },
+                { "type": "build", "name": "clangcl-export" },
+                { "type": "test", "name": "clangcl-export" }
             ]
         },
         {
