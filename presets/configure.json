@@ -1,0 +1,131 @@
+{
+    "version": 9,
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF",
+                "VCPKG_MANIFEST_INSTALL": "OFF"
+            }
+        },
+        {
+            "name": "classic",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "OFF",
+                "VCPKG_MANIFEST_INSTALL": "OFF"
+            }
+        },
+        {
+            "name": "manifest",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "VCPKG_MANIFEST_MODE": "ON",
+                "VCPKG_MANIFEST_INSTALL": "OFF",
+                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_${presetName}"
+            }
+        },
+        {
+            "name": "ninja",
+            "hidden": true,
+            "inherits": "base",
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "msvc-classic",
+            "inherits": "classic",
+            "description": "Visual Studio 18 2026",
+            "generator": "Visual Studio 18 2026",
+            "architecture": "x64",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-windows"
+            }
+        },
+        {
+            "name": "msvc",
+            "inherits": ["msvc-classic", "manifest"]
+        },
+        {
+            "name": "msvc-export",
+            "inherits": "msvc-classic",
+            "toolchainFile": "${sourceDir}/vcpkg_exported/msvc/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "clang-classic",
+            "inherits": ["ninja", "classic"],
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
+                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
+                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
+                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin",
+                "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
+            },
+            "environment": {
+                "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
+            }
+        },
+        {
+            "name": "clang",
+            "inherits": ["clang-classic", "manifest"]
+        },
+        {
+            "name": "overlay-triplets",
+            "cacheVariables": {
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
+            }
+        },
+        {
+            "name": "clang-export",
+            "inherits": ["clang-classic", "overlay-triplets"],
+            "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "clangcl-classic",
+            "inherits": "msvc-classic",
+            "description": "Clang CL (Visual Studio)",
+            "toolset": "ClangCL",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-clangcl-dynamic"
+            }
+        },
+        {
+            "name": "clangcl",
+            "inherits": ["clangcl-classic", "manifest"]
+        },
+        {
+            "name": "clangcl-export",
+            "inherits": ["clangcl-classic"],
+            "toolchainFile": "${sourceDir}/vcpkg_exported/clangcl/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "gcc-classic",
+            "inherits": "ninja",
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
+                "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
+                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe",
+                "COMPILER_BIN": "$env{MINGW64_ROOT}/bin"
+            },
+            "environment": {
+                "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
+            }
+        },
+        {
+            "name": "gcc",
+            "inherits": ["gcc-classic", "manifest"]
+        },
+        {
+            "name": "gcc-export",
+            "inherits": "gcc-classic",
+            "toolchainFile": "${sourceDir}/vcpkg_exported/gcc/scripts/buildsystems/vcpkg.cmake"
+        }
+    ]
+}

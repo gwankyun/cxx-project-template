@@ -1,0 +1,68 @@
+{
+    "version": 9,
+    "include": [
+        "configure.json"
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc-classic",
+            "configurePreset": "msvc-classic",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc",
+            "configurePreset": "msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "msvc-export",
+            "configurePreset": "msvc-export",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang-classic",
+            "configurePreset": "clang-classic",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang",
+            "configurePreset": "clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clang-export",
+            "configurePreset": "clang-export",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-classic",
+            "configurePreset": "clangcl-classic",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl",
+            "configurePreset": "clangcl",
+            "configuration": "Debug"
+        },
+        {
+            "name": "clangcl-export",
+            "configurePreset": "clangcl-export",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-classic",
+            "configurePreset": "gcc-classic",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc",
+            "configurePreset": "gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "gcc-export",
+            "configurePreset": "gcc-export",
+            "configuration": "Debug"
+        }
+    ]
+}

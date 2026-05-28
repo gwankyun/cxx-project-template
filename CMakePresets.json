@@ -1,304 +1,111 @@
 ﻿{
     "version": 9,
-    "configurePresets": [
-        {
-            "name": "base",
-            "hidden": true,
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "OFF",
-                "VCPKG_MANIFEST_INSTALL": "OFF"
-            }
-        },
-        {
-            "name": "classic",
-            "hidden": true,
-            "inherits": "base",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "OFF",
-                "VCPKG_MANIFEST_INSTALL": "OFF"
-            }
-        },
-        {
-            "name": "manifest",
-            "hidden": true,
-            "inherits": "base",
-            "cacheVariables": {
-                "VCPKG_MANIFEST_MODE": "ON",
-                "VCPKG_MANIFEST_INSTALL": "OFF",
-                "VCPKG_INSTALLED_DIR": "${sourceDir}/vcpkg_installed_${presetName}"
-            }
-        },
-        {
-            "name": "ninja",
-            "hidden": true,
-            "inherits": "base",
-            "generator": "Ninja Multi-Config",
-            "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-            }
-        },
-        {
-            "name": "msvc-classic",
-            "inherits": "classic",
-            "description": "Visual Studio 18 2026",
-            "generator": "Visual Studio 18 2026",
-            "architecture": "x64",
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-windows"
-            }
-        },
-        {
-            "name": "msvc",
-            "inherits": ["msvc-classic", "manifest"]
-        },
-        {
-            "name": "msvc-export",
-            "inherits": "msvc-classic",
-            "toolchainFile": "${sourceDir}/vcpkg_exported/msvc/scripts/buildsystems/vcpkg.cmake"
-        },
-        {
-            "name": "clang-classic",
-            "inherits": ["ninja", "classic"],
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-llvm-mingw-dynamic",
-                "CMAKE_C_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang.exe",
-                "CMAKE_CXX_COMPILER": "$env{LLVM_MINGW_ROOT}/bin/clang++.exe",
-                "COMPILER_BIN": "$env{LLVM_MINGW_ROOT}/bin",
-                "CMAKE_OBJDUMP": "$env{LLVM_MINGW_ROOT}/bin/llvm-objdump.exe"
-            },
-            "environment": {
-                "PATH": "$env{LLVM_MINGW_ROOT}/bin;$penv{PATH}"
-            }
-        },
-        {
-            "name": "clang",
-            "inherits": ["clang-classic", "manifest"]
-        },
-        {
-            "name": "overlay-triplets",
-            "cacheVariables": {
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/vcpkg/scripts/triplets/community"
-            }
-        },
-        {
-            "name": "clang-export",
-            "inherits": ["clang-classic", "overlay-triplets"],
-            "toolchainFile": "${sourceDir}/vcpkg_exported/clang/scripts/buildsystems/vcpkg.cmake"
-        },
-        {
-            "name": "clangcl-classic",
-            "inherits": "msvc-classic",
-            "description": "Clang CL (Visual Studio)",
-            "toolset": "ClangCL",
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-clangcl-dynamic"
-            }
-        },
-        {
-            "name": "clangcl",
-            "inherits": ["clangcl-classic", "manifest"]
-        },
-        {
-            "name": "clangcl-export",
-            "inherits": ["clangcl-classic"],
-            "toolchainFile": "${sourceDir}/vcpkg_exported/clangcl/scripts/buildsystems/vcpkg.cmake"
-        },
-        {
-            "name": "gcc-classic",
-            "inherits": "ninja",
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
-                "CMAKE_C_COMPILER": "$env{MINGW64_ROOT}/bin/gcc.exe",
-                "CMAKE_CXX_COMPILER": "$env{MINGW64_ROOT}/bin/g++.exe",
-                "COMPILER_BIN": "$env{MINGW64_ROOT}/bin"
-            },
-            "environment": {
-                "PATH": "$env{MINGW64_ROOT}/bin;$penv{PATH}"
-            }
-        },
-        {
-            "name": "gcc",
-            "inherits": ["gcc-classic", "manifest"]
-        },
-        {
-            "name": "gcc-export",
-            "inherits": "gcc-classic",
-            "toolchainFile": "${sourceDir}/vcpkg_exported/gcc/scripts/buildsystems/vcpkg.cmake"
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "msvc-classic",
-            "configurePreset": "msvc-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "msvc",
-            "configurePreset": "msvc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "msvc-export",
-            "configurePreset": "msvc-export",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang-classic",
-            "configurePreset": "clang-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang",
-            "configurePreset": "clang",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang-export",
-            "configurePreset": "clang-export",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-classic",
-            "configurePreset": "clangcl-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl",
-            "configurePreset": "clangcl",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-export",
-            "configurePreset": "clangcl-export",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc-classic",
-            "configurePreset": "gcc-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc",
-            "configurePreset": "gcc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc-export",
-            "configurePreset": "gcc-export",
-            "configuration": "Debug"
-        }
-    ],
-    "testPresets": [
-        {
-            "name": "msvc-classic",
-            "configurePreset": "msvc-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "msvc",
-            "configurePreset": "msvc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "msvc-export",
-            "configurePreset": "msvc-export",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang-classic",
-            "configurePreset": "clang-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang",
-            "configurePreset": "clang",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clang-export",
-            "configurePreset": "clang-export",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-classic",
-            "configurePreset": "clangcl-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl",
-            "configurePreset": "clangcl",
-            "configuration": "Debug"
-        },
-        {
-            "name": "clangcl-export",
-            "configurePreset": "clangcl-export",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc-classic",
-            "configurePreset": "gcc-classic",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc",
-            "configurePreset": "gcc",
-            "configuration": "Debug"
-        },
-        {
-            "name": "gcc-export",
-            "configurePreset": "gcc-export",
-            "configuration": "Debug"
-        }
+    "include": [
+        "presets/configure.json",
+        "presets/build.json",
+        "presets/test.json"
     ],
     "workflowPresets": [
         {
             "name": "msvc",
             "steps": [
-                { "type": "configure", "name": "msvc" },
-                { "type": "build", "name": "msvc" },
-                { "type": "test", "name": "msvc" }
+                {
+                    "type": "configure",
+                    "name": "msvc"
+                },
+                {
+                    "type": "build",
+                    "name": "msvc"
+                },
+                {
+                    "type": "test",
+                    "name": "msvc"
+                }
             ]
         },
         {
             "name": "clang",
             "steps": [
-                { "type": "configure", "name": "clang" },
-                { "type": "build", "name": "clang" },
-                { "type": "test", "name": "clang" }
+                {
+                    "type": "configure",
+                    "name": "clang"
+                },
+                {
+                    "type": "build",
+                    "name": "clang"
+                },
+                {
+                    "type": "test",
+                    "name": "clang"
+                }
             ]
         },
         {
             "name": "clang-export",
             "steps": [
-                { "type": "configure", "name": "clang-export" },
-                { "type": "build", "name": "clang-export" },
-                { "type": "test", "name": "clang-export" }
+                {
+                    "type": "configure",
+                    "name": "clang-export"
+                },
+                {
+                    "type": "build",
+                    "name": "clang-export"
+                },
+                {
+                    "type": "test",
+                    "name": "clang-export"
+                }
             ]
         },
         {
             "name": "clangcl",
             "steps": [
-                { "type": "configure", "name": "clangcl" },
-                { "type": "build", "name": "clangcl" },
-                { "type": "test", "name": "clangcl" }
+                {
+                    "type": "configure",
+                    "name": "clangcl"
+                },
+                {
+                    "type": "build",
+                    "name": "clangcl"
+                },
+                {
+                    "type": "test",
+                    "name": "clangcl"
+                }
             ]
         },
         {
             "name": "clangcl-export",
             "steps": [
-                { "type": "configure", "name": "clangcl-export" },
-                { "type": "build", "name": "clangcl-export" },
-                { "type": "test", "name": "clangcl-export" }
+                {
+                    "type": "configure",
+                    "name": "clangcl-export"
+                },
+                {
+                    "type": "build",
+                    "name": "clangcl-export"
+                },
+                {
+                    "type": "test",
+                    "name": "clangcl-export"
+                }
             ]
         },
         {
             "name": "gcc",
             "steps": [
-                { "type": "configure", "name": "gcc" },
-                { "type": "build", "name": "gcc" },
-                { "type": "test", "name": "gcc" }
+                {
+                    "type": "configure",
+                    "name": "gcc"
+                },
+                {
+                    "type": "build",
+                    "name": "gcc"
+                },
+                {
+                    "type": "test",
+                    "name": "gcc"
+                }
             ]
         }
     ]
