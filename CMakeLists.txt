@@ -80,7 +80,47 @@ doctest_discover_tests(tests)
 
 set(exe_list main tests)
 
+set(files "")
+
+list(APPEND files "${CMAKE_SOURCE_DIR}/test.json")
+
+if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
+  # 使用 clang 編譯器()
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    cmake_path(SET clang_bin NORMALIZE "$ENV{LLVM_MINGW_ROOT}/bin")
+
+    set(dll_files "${clang_bin}/libc++.dll" "${clang_bin}/libunwind.dll")
+
+    list(APPEND files "${dll_files}")
+  endif()
+
+  # 使用 gcc 編譯器
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    cmake_path(SET gcc_bin NORMALIZE "$ENV{MINGW64_ROOT}/bin")
+
+    set(
+      dll_files
+      "${gcc_bin}/libgcc_s_seh-1.dll"
+      "${gcc_bin}/libstdc++-6.dll"
+      "${gcc_bin}/libwinpthread-1.dll"
+    )
+
+    list(APPEND files "${dll_files}")
+  endif()
+endif()
+
 foreach(exe IN LISTS exe_list)
+  foreach(f IN LISTS files)
+    add_custom_command(
+      TARGET ${exe}
+      POST_BUILD
+      COMMAND
+        ${CMAKE_COMMAND} -E copy_if_different "${f}" "$<TARGET_FILE_DIR:${exe}>"
+      COMMENT "Copy ${f}"
+    )
+  endforeach()
+
+  #[[
   add_custom_command(
     TARGET ${exe}
     POST_BUILD
@@ -113,4 +153,5 @@ foreach(exe IN LISTS exe_list)
       COMMENT ""
     )
   endif()
+  #]]
 endforeach()
