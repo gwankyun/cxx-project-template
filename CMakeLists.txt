@@ -84,11 +84,19 @@ doctest_discover_tests(tests)
 
 set(exe_list main tests)
 
-include(cmake/get_runtime_dependencies.cmake)
+set(USE_BundleUtilities TRUE)
 
-get_runtime_dependencies(files)
+if(USE_BundleUtilities)
+  set(files "")
+else()
+  include(cmake/get_runtime_dependencies.cmake)
+  get_runtime_dependencies(files)
+endif()
 
 list(APPEND files "${CMAKE_SOURCE_DIR}/test.json")
+
+set(dirs "${COMPILER_BIN}")
+cmake_path(NORMAL_PATH dirs)
 
 foreach(exe IN LISTS exe_list)
   foreach(f IN LISTS files)
@@ -101,38 +109,19 @@ foreach(exe IN LISTS exe_list)
     )
   endforeach()
 
-  #[[
-  add_custom_command(
-    TARGET ${exe}
-    POST_BUILD
-    COMMAND
-      ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_SOURCE_DIR}/test.json"
-      "$<TARGET_FILE_DIR:${exe}>"
-    COMMENT "Copy test.json"
-  )
-
-  # 複製運行時文件
-  if(
-    (
-      (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-      AND (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
-    )
-    OR ((CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
-  )
-    set(dirs "${COMPILER_BIN}")
-    cmake_path(NORMAL_PATH dirs)
+  if(USE_BundleUtilities)
     add_custom_command(
       TARGET ${exe}
       POST_BUILD
       COMMAND
         ${CMAKE_COMMAND}
         # gersemi: off
-        -D apps="$<TARGET_FILE:${exe}>"
-        -D dirs="${dirs}"
+      -D apps="$<TARGET_FILE:${exe}>"
+      -D dirs="${dirs}"
+      "$<$<BOOL:${CMAKE_OBJDUMP}>:-D CMAKE_OBJDUMP=${CMAKE_OBJDUMP}>"
         # gersemi: on
         -P "${CMAKE_SOURCE_DIR}/cmake/bundle.cmake"
       COMMENT ""
     )
   endif()
-  #]]
 endforeach()
